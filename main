@@ -1,0 +1,52 @@
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        big = max(height)
+        big_idx = height.index(big)
+        water_total = 0
+        
+        def find_right(curr, height):
+            right_big = 0
+            idx = curr+1
+            for i in range(curr+1, len(height)):
+                if height[i]>right_big:
+                    right_big=height[i]
+                    idx = i
+            return idx
+
+        def find_left(curr, height):
+            left_big = 0
+            idx = curr-1
+            for i in range(0, curr):
+                if height[i]>left_big:
+                    left_big=height[i]
+                    idx = i
+            return idx
+
+        
+        #total the right
+        curr_idx = big_idx
+        print("Big index is:", big_idx)
+        while curr_idx<len(height)-1:
+            next_idx = find_right(curr_idx, height)
+            for i in range(curr_idx, next_idx):
+                if height[next_idx]-height[i] > 0:
+                    water_total+=height[next_idx]-height[i]
+                    print("Adding", height[next_idx]-height[i], "amount of water at index:", i)
+            curr_idx = next_idx
+
+        print("Total after right is:", water_total)
+
+
+        #total the left
+        curr_idx = big_idx
+        print("Big index is:", big_idx)
+        while curr_idx>0:
+            next_idx = find_left(curr_idx, height)
+            for i in range(next_idx, curr_idx):
+                water_total+=height[next_idx]-height[i]
+                print("Adding", height[curr_idx]-height[i], "amount of water at index:", i)
+            curr_idx = next_idx
+
+        print("Total after left is:", water_total)
+
+        return water_total
